@@ -54,7 +54,7 @@ static void test_parse_number() {
     TEST_NUMBER(0.0, "0");
     TEST_NUMBER(0.0, "-0");
     TEST_NUMBER(0.0, "-0.0");
-    TEST_NUMBER(1.0, "1.");
+    TEST_NUMBER(1.0, "1.0");
     TEST_NUMBER(-1.0, "-1");
     TEST_NUMBER(1.5, "1.5");
     TEST_NUMBER(-1.5, "-1.5");

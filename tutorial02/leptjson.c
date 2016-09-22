@@ -44,6 +44,8 @@ static int lept_parse_null(lept_context* c, lept_value* v) {
     return LEPT_PARSE_OK;
 }
 
+#if 0
+
 static int validate_number(const char *number)
 {
     (void)number;
@@ -82,12 +84,29 @@ static int validate_number(const char *number)
     }
     return 1;
 }
+#endif
 
 static int lept_parse_number(lept_context* c, lept_value* v) {
     char* end;
-    /* \TODO validate number */
-    if (!validate_number(c->json)) 
-        return LEPT_PARSE_INVALID_VALUE;
+    const char *p = c->json;
+    if (*p == '-') ++p;
+    if (*p == '0') {
+        ++p;
+    } else {
+        if (!ISDIGIT1TO9(*p)) return LEPT_PARSE_INVALID_VALUE;
+        for(++p; ISDIGIT(*p); ++p );
+    }
+    if (*p == '.') {
+        ++p;
+        if (!ISDIGIT(*p)) return LEPT_PARSE_INVALID_VALUE;
+        for(++p; ISDIGIT(*p); ++p );
+    }
+    if (*p == 'e' || *p == 'E') {
+        p++;
+        if (*p == '+' || *p == '-') ++p;
+        if (!ISDIGIT(*p)) return LEPT_PARSE_INVALID_VALUE;
+        for(++p; ISDIGIT(*p); ++p );
+    }
     v->n = strtod(c->json, &end);
     if (c->json == end)
         return LEPT_PARSE_INVALID_VALUE;
